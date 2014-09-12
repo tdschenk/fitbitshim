@@ -8,7 +8,7 @@
 
 ## Create OAuth and retrieve Fitbit data
 #' @export
-read_fitbit <- function(key, secret, pilr_pt, 
+read_fitbit <- function(key, secret, 
                         start_date = "2013-01-01", end_date = "today") {
   token_url = "http://api.fitbit.com/oauth/request_token"
   access_url = "http://api.fitbit.com/oauth/access_token"
@@ -25,21 +25,22 @@ read_fitbit <- function(key, secret, pilr_pt,
   data
 }
 
-## Add PiLR metadata and write to PiLR system
+## Add PiLR metadata to dataset and write to PiLR system for given participant
 #' @export
-write_fitbit <- function(data) {
+write_fitbit <- function(data, pilr_pt) {
   data$id <- as.character(10001:(10001+length(data[,1])-1))
   data$timestamp <- data$dateTime
-  data$pt <- as.character(pt)
+  data$pt <- as.character(pilr_pt)
   data$value <- as.numeric(data$value)
   
   write_pilr(data_set = "pilrhealth:fitbit:steps", schema = "1", data = data)
 }
 
-##
+## Accepts a Subscription API notification in the form of a JSON, extracts
+## necessary information to make a call to read_fitbit
 #' @export
 accept_notification <- function(message) {
-  notif <- fromJSON(notif)
+  notif <- jsonlite::fromJSON(notif)
 }
 
 ## Some testing code; delete later
@@ -49,5 +50,5 @@ accept_notification <- function(message) {
 #Add subscription (101 is ID)
 #POST("http://api.fitbit.com/1/user/-/activities/apiSubscriptions/101-activities.json", sig)
 
-#Endpoint URL??
+#Possible Endpoint URL??
 #"http://107.170.188.61/ocpu/github/tdschenk/fitbitshim/R/accept_notification"
