@@ -13,7 +13,7 @@ read_fitbit <- function(key, secret,
   token_url = "http://api.fitbit.com/oauth/request_token"
   access_url = "http://api.fitbit.com/oauth/access_token"
   auth_url = "http://www.fitbit.com/oauth/authorize"
-  fbr = oauth_app('StepTrack',key,secret)
+  fbr = oauth_app('PiLR',key,secret)
   fitbit = oauth_endpoint(token_url,auth_url,access_url)
   token = oauth1.0_token(fitbit,fbr)
   sig <- config(token = token)
@@ -21,7 +21,7 @@ read_fitbit <- function(key, secret,
   data <- GET(paste0("http://api.fitbit.com/1/user/-/activities/steps/date/",
                      start_date, "/", end_date, ".json"), sig)
   
-  data <- jsonlite::fromJSON(as.character(steps))[[1]]
+  data <- jsonlite::fromJSON(as.character(data))[[1]]
   data
 }
 
@@ -50,5 +50,3 @@ accept_notification <- function(message) {
 #Add subscription (101 is ID)
 #POST("http://api.fitbit.com/1/user/-/activities/apiSubscriptions/101-activities.json", sig)
 
-#Possible Endpoint URL??
-#"http://107.170.188.61/ocpu/github/tdschenk/fitbitshim/R/accept_notification"
